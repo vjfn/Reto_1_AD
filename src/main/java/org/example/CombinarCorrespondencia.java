@@ -4,24 +4,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CombinarCorrespondencia {
-    public static void main(String[] args) {
-        Map<String, Cliente> clientes = cargarClientes();
-        String plantilla = cargarPlantilla();
 
-        vaciarCarpetaSalida();
+//    public static Map<String, Cliente> cargarClientes() {
+//        Map<String, Cliente> clientes = new HashMap<>();
+//
+//        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/ListaClientes.csv"))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                String[] datos = line.split(";");
+//                String codigo = "DATOS en csv Insuficientes";
+//                if (datos.length >= 5) {
+//                    codigo = datos[0];
+//                    String nombreEmpresa = datos[1];
+//                    String localidad = datos[2];
+//                    String correo = datos[3];
+//                    String nombreResponsable = datos[4];
+//                    clientes.put(codigo, new Cliente(codigo,nombreEmpresa, localidad, correo, nombreResponsable));
+//                } else {
+//                    clientes.put(codigo, new Cliente("ERROR", "ERROR", "ERROR", "ERROR","ERROR"));
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return clientes;
+//    }
 
-        combinarCorrespondencia(clientes, plantilla);
-
-        System.out.println("Combinación de correspondencia completada.");
-    }
-
-    public static Map<String, Cliente> cargarClientes() {
+    public static Map<String, Cliente> cargarClientes() throws ArchivosFaltantesException {
         Map<String, Cliente> clientes = new HashMap<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/ListaClientes.csv"))) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/ListaClientes.csv"));
             String line;
             while ((line = br.readLine()) != null) {
                 String[] datos = line.split(";");
+
                 String codigo = "DATOS en csv Insuficientes";
                 if (datos.length >= 5) {
                     codigo = datos[0];
@@ -29,30 +46,30 @@ public class CombinarCorrespondencia {
                     String localidad = datos[2];
                     String correo = datos[3];
                     String nombreResponsable = datos[4];
-                    clientes.put(codigo, new Cliente(codigo,nombreEmpresa, localidad, correo, nombreResponsable));
+                    clientes.put(codigo, new Cliente(codigo, nombreEmpresa, localidad, correo, nombreResponsable));
                 } else {
-                    clientes.put(codigo, new Cliente("ERROR", "ERROR", "ERROR", "ERROR","ERROR"));
+                    clientes.put(codigo, new Cliente("ERROR", "ERROR", "ERROR", "ERROR", "ERROR"));
                 }
             }
+            br.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ArchivosFaltantesException("Falta el archivo ListaClientes.csv en la carpeta resources");
         }
-
         return clientes;
     }
 
-    public static String cargarPlantilla() {
+    public static String cargarPlantilla() throws ArchivosFaltantesException {
         StringBuilder contenido = new StringBuilder();
-
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/template.txt"))) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/template.txt"));
             String line;
             while ((line = br.readLine()) != null) {
                 contenido.append(line).append("\n");
             }
+            br.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ArchivosFaltantesException("Falta el archivo template.txt en la carpeta resources");
         }
-
         return contenido.toString();
     }
 
@@ -85,6 +102,11 @@ public class CombinarCorrespondencia {
             for (File archivo : archivos) {
                 archivo.delete();
             }
+        }
+    }
+    static class ArchivosFaltantesException extends Exception {
+        public ArchivosFaltantesException(String mensaje) {
+            super(mensaje);
         }
     }
 }
