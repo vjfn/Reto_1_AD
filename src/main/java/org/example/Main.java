@@ -4,7 +4,13 @@ import java.util.Map;
 
 import static org.example.CombinarCorrespondencia.*;
 
-
+/**
+ *Este es el Main que llevará a cabo la combinación de correspondencia.
+ *En el caso de quefalten archivos o de que uno esté vació nos lo indicará por pantalla
+ *Si hay un marcador inválido, el método combinarCorrespondencia no sería capaz de hacer el reemplazo
+ *quedando esa parte de la template sin modificar
+ *Si faltan datos en el csv, el archivo generado será template-DATOS en csv Insuficientes.txt
+ */
 public class Main {
     public static void main(String[] args) {
         try {
@@ -23,12 +29,4 @@ public class Main {
             System.out.println("Por favor, verifique los archivos faltantes antes de volver a ejecutar el programa.");
         }
     }
-
-    //En el caso de quefalten archivos o de que uno esté vació nos lo indicará por pantalla
-
-    //Si hay un marcador inválido, el método combinarCorrespondencia no sería capaz de hacer el reemplazo
-    //quedando esa parte de la template sin modificar
-
-    //Si faltan datos en el csv, el archivo generado será template-DATOS en csv Insuficientes.txt
-
 }

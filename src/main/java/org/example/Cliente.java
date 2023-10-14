@@ -1,5 +1,8 @@
 package org.example;
 
+/**
+ * Clase que contiene todos los datos del cliente y los métodos get necesarios
+ */
 public class Cliente {
     private String codigo;
     private String nombreEmpresa;
